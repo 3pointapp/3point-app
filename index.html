@@ -104,6 +104,166 @@
         .site-footer a:hover { text-decoration: underline; }
         .footer-links { margin: 15px 0; }
         .footer-links a { margin: 0 15px; }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            
+            /* Header adjustments */
+            .site-header { padding: 25px 15px; }
+            .logo-icon { width: 70px; height: 70px; }
+            .site-title { font-size: 28px; }
+            .site-tagline { font-size: 12px; }
+            
+            /* Container */
+            .container { padding: 15px; }
+            h1 { font-size: 20px; }
+            .subtitle { font-size: 12px; }
+            
+            /* Main navigation */
+            .main-nav { flex-direction: column; gap: 8px; }
+            .main-tab { width: 100%; padding: 12px; font-size: 14px; }
+            
+            /* Controls */
+            .controls { flex-direction: column; gap: 10px; align-items: stretch; }
+            .controls > div { width: 100%; }
+            .controls input, .controls select { width: 100%; }
+            .season-selector { font-size: 14px; }
+            
+            /* Table wrapper - make it scrollable with visible scrollbar */
+            .table-wrapper { 
+                overflow-x: auto; 
+                -webkit-overflow-scrolling: touch;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+            table { 
+                font-size: 10px; 
+                min-width: 1200px; /* Force horizontal scroll */
+            }
+            th, td { padding: 8px 6px; }
+            .player-photo { width: 30px; height: 30px; }
+            .player-cell { gap: 8px; }
+            
+            /* Add scroll indicator */
+            .table-wrapper::after {
+                content: '← Swipe to see more →';
+                display: block;
+                text-align: center;
+                padding: 8px;
+                background: #f0f8ff;
+                color: #2196F3;
+                font-size: 11px;
+                border-top: 1px solid #ddd;
+            }
+            
+            /* Visualizations - CRITICAL FIXES */
+            .viz-tabs { 
+                flex-wrap: wrap; 
+                gap: 5px;
+                overflow-x: auto;
+            }
+            .viz-tab { 
+                font-size: 11px; 
+                padding: 8px 10px; 
+                white-space: nowrap;
+                flex: 0 0 auto;
+            }
+            
+            /* Force charts to be responsive */
+            canvas { 
+                max-width: 100% !important; 
+                height: auto !important;
+                min-height: 250px !important;
+            }
+            
+            /* Chart containers need proper sizing */
+            .viz-panel {
+                min-height: 300px;
+                width: 100%;
+            }
+            
+            .viz-info { font-size: 11px; padding: 10px; }
+            
+            /* Player Profile - CRITICAL FIXES */
+            #playerProfileSelect { width: 100%; font-size: 14px; }
+            #playerHeader { 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 15px; 
+            }
+            #playerHeader img { 
+                width: 80px !important; 
+                height: 80px !important; 
+            }
+            #playerHeader > div { 
+                display: grid; 
+                grid-template-columns: 1fr 1fr; 
+                gap: 8px; 
+                font-size: 12px; 
+            }
+            
+            /* Player profile charts - stack vertically */
+            #playerProfileContent > div:nth-child(2) { 
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+            }
+            
+            /* Make sure player profile charts render */
+            #playerProfileContent canvas {
+                width: 100% !important;
+                height: 250px !important;
+                max-width: 100% !important;
+            }
+            
+            /* Similar players - 2 columns on mobile */
+            #similarPlayersGrid { 
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px;
+            }
+            #similarPlayersGrid > div { font-size: 11px; padding: 8px; }
+            #similarPlayersGrid img { width: 50px; height: 50px; }
+            
+            /* Best 3PES table */
+            .best3pes-table { font-size: 10px; }
+            .best3pes-table img { width: 30px; height: 30px; }
+            
+            /* Footer */
+            .site-footer { padding: 20px 15px; font-size: 12px; }
+            .footer-links { 
+                display: flex; 
+                flex-direction: column; 
+                gap: 8px; 
+            }
+            .footer-links a { margin: 0; display: block; }
+            
+            /* Terms modal on mobile */
+            #termsModal { padding: 15px; }
+            #termsModal > div { 
+                padding: 20px; 
+                font-size: 13px;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            #termsModal h2 { font-size: 18px; }
+            #termsModal h3 { font-size: 15px; margin-top: 15px; }
+            #termsModal ul { margin-left: 20px; font-size: 12px; }
+            #termsModal button { font-size: 14px; padding: 10px 20px; }
+        }
+        
+        /* Small phones */
+        @media (max-width: 480px) {
+            .site-title { font-size: 24px; }
+            h1 { font-size: 18px; }
+            table { font-size: 9px; }
+            th, td { padding: 6px 4px; }
+            .viz-tab { font-size: 10px; padding: 6px 8px; }
+            #similarPlayersGrid { grid-template-columns: 1fr !important; }
+            #playerHeader > div { 
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
