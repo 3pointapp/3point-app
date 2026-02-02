@@ -1,0 +1,24 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- White background with subtle border -->
+  <rect width="64" height="64" fill="white" rx="8"/>
+  <rect width="64" height="64" fill="none" stroke="#e5e7eb" stroke-width="1" rx="8"/>
+  
+  <!-- Yves Klein Blue arcs -->
+  <g transform="translate(32, 48)">
+    <path d="M -22 0 A 22 22 0 0 1 22 0" 
+          fill="none" 
+          stroke="#002FA7" 
+          stroke-width="3.5" 
+          opacity="1"/>
+    <path d="M -17 0 A 17 17 0 0 1 17 0" 
+          fill="none" 
+          stroke="#0051D5" 
+          stroke-width="3.5" 
+          opacity="0.8"/>
+    <path d="M -12 0 A 12 12 0 0 1 12 0" 
+          fill="none" 
+          stroke="#2B7FE8" 
+          stroke-width="3.5" 
+          opacity="0.6"/>
+  </g>
+</svg>
