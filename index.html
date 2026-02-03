@@ -197,27 +197,42 @@
             
             .viz-info { font-size: 11px; padding: 10px; }
             
-            /* Best 3PES Table - FIX ZOOM */
+            /* Best 3PES Table - FIX ZOOM AND COLUMN WIDTH */
             .best3pes-table { 
-                font-size: 9px !important;
+                font-size: 8px !important;
                 width: 100%;
             }
             .best3pes-table th,
             .best3pes-table td { 
-                padding: 6px 3px !important;
+                padding: 4px 2px !important;
+                white-space: nowrap;
             }
             .best3pes-table img { 
-                width: 25px !important; 
-                height: 25px !important; 
+                width: 20px !important; 
+                height: 20px !important; 
+            }
+            .best3pes-table .rank-col {
+                width: 25px !important;
+                max-width: 25px !important;
             }
             .best3pes-table .player-col {
-                max-width: 100px;
-                font-size: 9px;
+                width: 80px !important;
+                max-width: 80px !important;
+                font-size: 8px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .best3pes-table .stat-col {
+                width: 40px !important;
+                max-width: 40px !important;
             }
             #best3pesTable {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
             }
+            
+            /* Fix frequency column font size */
+            .freq { font-size: 10px !important; }
             
             /* Player Profile - CRITICAL FIXES */
             #playerProfileSelect { width: 100%; font-size: 14px; }
@@ -1362,6 +1377,32 @@
             }
         }
         
+        // Helper function for mobile-responsive chart options
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+        
+        function getMobileChartOptions() {
+            if (isMobile()) {
+                return {
+                    titleSize: 11,
+                    legendSize: 9,
+                    axisLabelSize: 9,
+                    axisTitleSize: 10,
+                    aspectRatio: 1.2,
+                    legendDisplay: false
+                };
+            }
+            return {
+                titleSize: 16,
+                legendSize: 12,
+                axisLabelSize: 11,
+                axisTitleSize: 12,
+                aspectRatio: 2,
+                legendDisplay: true
+            };
+        }
+        
         function createScatterChart(players) {
             const ctx = document.getElementById('scatterChart').getContext('2d');
             
@@ -1382,6 +1423,7 @@
             }));
             
             const trendlineData = calculateTrendline(data);
+            const mobileOpts = getMobileChartOptions();
             
             charts.scatter = new Chart(ctx, {
                 type: 'scatter',
@@ -1392,8 +1434,8 @@
                         backgroundColor: 'rgba(33, 150, 243, 0.6)',
                         borderColor: 'rgba(33, 150, 243, 1)',
                         borderWidth: 1,
-                        pointRadius: 5,
-                        pointHoverRadius: 8
+                        pointRadius: isMobile() ? 3 : 5,
+                        pointHoverRadius: isMobile() ? 5 : 8
                     }, {
                         label: 'Trend',
                         data: trendlineData,
@@ -1409,12 +1451,16 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    aspectRatio: 2,
+                    aspectRatio: mobileOpts.aspectRatio,
                     plugins: {
                         title: {
                             display: true,
-                            text: `3P% Over Expected vs 3-Point Attempts (${currentVizSeason})`,
-                            font: { size: 16 }
+                            text: isMobile() ? '3P%OE vs 3PA' : `3P% Over Expected vs 3-Point Attempts (${currentVizSeason})`,
+                            font: { size: mobileOpts.titleSize }
+                        },
+                        legend: {
+                            display: mobileOpts.legendDisplay,
+                            labels: { font: { size: mobileOpts.legendSize } }
                         },
                         tooltip: {
                             callbacks: {
@@ -1431,11 +1477,21 @@
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: '3-Point Attempts' },
+                            title: { 
+                                display: true, 
+                                text: isMobile() ? '3PA' : '3-Point Attempts',
+                                font: { size: mobileOpts.axisTitleSize }
+                            },
+                            ticks: { font: { size: mobileOpts.axisLabelSize } },
                             beginAtZero: true
                         },
                         y: {
-                            title: { display: true, text: '3P% Over Expected' },
+                            title: { 
+                                display: true, 
+                                text: isMobile() ? '3P%OE' : '3P% Over Expected',
+                                font: { size: mobileOpts.axisTitleSize }
+                            },
+                            ticks: { font: { size: mobileOpts.axisLabelSize } },
                             grid: { color: (context) => context.tick.value === 0 ? '#000' : '#e0e0e0' }
                         }
                     }
@@ -1462,6 +1518,7 @@
             }));
             
             const trendlineData = calculateTrendline(data);
+            const mobileOpts = getMobileChartOptions();
             
             charts.metrics = new Chart(ctx, {
                 type: 'scatter',
@@ -1472,8 +1529,8 @@
                         backgroundColor: 'rgba(156, 39, 176, 0.6)',
                         borderColor: 'rgba(156, 39, 176, 1)',
                         borderWidth: 1,
-                        pointRadius: 5,
-                        pointHoverRadius: 8
+                        pointRadius: isMobile() ? 3 : 5,
+                        pointHoverRadius: isMobile() ? 5 : 8
                     }, {
                         label: 'Trend',
                         data: trendlineData,
@@ -1489,12 +1546,16 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    aspectRatio: 2,
+                    aspectRatio: mobileOpts.aspectRatio,
                     plugins: {
                         title: {
                             display: true,
-                            text: `3PAA (Total Value) vs 3PES (Volume-Adjusted) - ${currentVizSeason}`,
-                            font: { size: 16 }
+                            text: isMobile() ? '3PAA vs 3PES' : `3PAA (Total Value) vs 3PES (Volume-Adjusted) - ${currentVizSeason}`,
+                            font: { size: mobileOpts.titleSize }
+                        },
+                        legend: {
+                            display: mobileOpts.legendDisplay,
+                            labels: { font: { size: mobileOpts.legendSize } }
                         },
                         tooltip: {
                             callbacks: {
@@ -1510,8 +1571,22 @@
                         }
                     },
                     scales: {
-                        x: { title: { display: true, text: '3PAA (3-Point Above Average)' } },
-                        y: { title: { display: true, text: '3PES (3-Point Efficiency Score)' } }
+                        x: { 
+                            title: { 
+                                display: true, 
+                                text: isMobile() ? '3PAA' : '3PAA (3-Point Above Average)',
+                                font: { size: mobileOpts.axisTitleSize }
+                            },
+                            ticks: { font: { size: mobileOpts.axisLabelSize } }
+                        },
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: isMobile() ? '3PES' : '3PES (3-Point Efficiency Score)',
+                                font: { size: mobileOpts.axisTitleSize }
+                            },
+                            ticks: { font: { size: mobileOpts.axisLabelSize } }
+                        }
                     }
                 }
             });
