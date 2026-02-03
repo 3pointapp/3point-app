@@ -141,9 +141,21 @@
                 font-size: 10px; 
                 min-width: 1200px; /* Force horizontal scroll */
             }
-            th, td { padding: 8px 6px; }
-            .player-photo { width: 30px; height: 30px; }
-            .player-cell { gap: 8px; }
+            th, td { padding: 8px 4px; }
+            
+            /* CRITICAL: Make player column narrower on mobile */
+            .player-name {
+                max-width: 120px !important;
+                min-width: 120px !important;
+            }
+            .player-photo { width: 25px; height: 25px; }
+            .player-cell { gap: 6px; }
+            .player-cell span { 
+                font-size: 10px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
             
             /* Add scroll indicator */
             .table-wrapper::after {
@@ -170,20 +182,42 @@
                 flex: 0 0 auto;
             }
             
-            /* Force charts to be responsive */
+            /* Force charts to be responsive with TALLER height */
             canvas { 
                 max-width: 100% !important; 
                 height: auto !important;
-                min-height: 250px !important;
+                min-height: 350px !important; /* Increased from 250px */
             }
             
             /* Chart containers need proper sizing */
             .viz-panel {
-                min-height: 300px;
+                min-height: 400px; /* Increased from 300px */
                 width: 100%;
             }
             
             .viz-info { font-size: 11px; padding: 10px; }
+            
+            /* Best 3PES Table - FIX ZOOM */
+            .best3pes-table { 
+                font-size: 9px !important;
+                width: 100%;
+            }
+            .best3pes-table th,
+            .best3pes-table td { 
+                padding: 6px 3px !important;
+            }
+            .best3pes-table img { 
+                width: 25px !important; 
+                height: 25px !important; 
+            }
+            .best3pes-table .player-col {
+                max-width: 100px;
+                font-size: 9px;
+            }
+            #best3pesTable {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
             
             /* Player Profile - CRITICAL FIXES */
             #playerProfileSelect { width: 100%; font-size: 14px; }
@@ -203,17 +237,27 @@
                 font-size: 12px; 
             }
             
-            /* Player profile charts - stack vertically */
+            /* Player profile charts - stack vertically with TALLER height */
             #playerProfileContent > div:nth-child(2) { 
                 grid-template-columns: 1fr !important;
                 gap: 20px;
             }
             
-            /* Make sure player profile charts render */
+            /* Make sure player profile charts render TALLER */
             #playerProfileContent canvas {
                 width: 100% !important;
-                height: 250px !important;
+                height: 350px !important; /* Increased from 250px */
                 max-width: 100% !important;
+            }
+            
+            /* Player season table */
+            #playerSeasonTable {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            #playerSeasonTable table {
+                font-size: 9px;
+                min-width: 600px;
             }
             
             /* Similar players - 2 columns on mobile */
@@ -223,10 +267,6 @@
             }
             #similarPlayersGrid > div { font-size: 11px; padding: 8px; }
             #similarPlayersGrid img { width: 50px; height: 50px; }
-            
-            /* Best 3PES table */
-            .best3pes-table { font-size: 10px; }
-            .best3pes-table img { width: 30px; height: 30px; }
             
             /* Footer */
             .site-footer { padding: 20px 15px; font-size: 12px; }
@@ -256,8 +296,24 @@
             .site-title { font-size: 24px; }
             h1 { font-size: 18px; }
             table { font-size: 9px; }
-            th, td { padding: 6px 4px; }
+            th, td { padding: 6px 3px; }
+            
+            /* Even narrower player column on small phones */
+            .player-name {
+                max-width: 100px !important;
+                min-width: 100px !important;
+            }
+            
             .viz-tab { font-size: 10px; padding: 6px 8px; }
+            
+            /* Taller charts on small phones too */
+            canvas {
+                min-height: 320px !important;
+            }
+            #playerProfileContent canvas {
+                height: 320px !important;
+            }
+            
             #similarPlayersGrid { grid-template-columns: 1fr !important; }
             #playerHeader > div { 
                 grid-template-columns: 1fr;
