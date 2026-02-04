@@ -127,6 +127,14 @@
             /* Hide Visualizations tab on mobile - too complex for small screens */
             .main-tab:nth-child(2) { display: none; }
             
+            /* About page mobile styles */
+            #about-view h1 { font-size: 24px !important; }
+            #about-view h2 { font-size: 20px !important; }
+            #about-view h3 { font-size: 16px !important; }
+            #about-view p, #about-view li { font-size: 14px !important; }
+            #about-view section { margin-bottom: 30px !important; }
+            #about-view div[style*="padding: 20px"] { padding: 15px !important; }
+            
             /* Show message if someone tries to access visualizations */
             #visualizations-view::before {
                 content: 'Interactive charts are best viewed on desktop. View the Best 3PES Seasons table below, or use the Table View and Player Profile tabs for mobile-optimized data.';
@@ -387,6 +395,7 @@
             <button class="main-tab active" onclick="showMainView('table')">Table View</button>
             <button class="main-tab" onclick="showMainView('visualizations')">Visualizations</button>
             <button class="main-tab" onclick="showMainView('player-profile')">Player Profile</button>
+            <button class="main-tab" onclick="showMainView('about')">About</button>
         </div>
 
         <!-- Table View -->
@@ -559,6 +568,121 @@
             
             <div id="playerProfilePlaceholder" style="text-align: center; padding: 60px; color: #999; font-size: 18px;">
                 Select a player to view their profile
+            </div>
+        </div>
+        
+        <!-- About & Glossary View -->
+        <div id="about-view" class="main-view">
+            <div style="max-width: 900px; margin: 0 auto; padding: 20px;">
+                <h1 style="font-size: 32px; margin-bottom: 30px; color: #1a365d;">About & Glossary</h1>
+                
+                <!-- What is 3point.app -->
+                <section style="margin-bottom: 40px;">
+                    <h2 style="font-size: 24px; margin-bottom: 15px; color: #2196F3;">What is 3point.app?</h2>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                        3point.app provides advanced NBA 3-point shooting analytics with detailed defender distance breakdowns. The platform seeks to quantify what the eye test tells us: some shooters are more efficient than raw percentages suggest because they consistently make difficult shots. Our proprietary metrics (3PES, 3P%OE, and 3PAA) account for shot difficulty and volume to identify the league's most efficient three-point shooters. The platform tracks 13 seasons of data (2013-14 through present) and offers comprehensive public analysis of how players perform under different defensive pressures.
+                    </p>
+                </section>
+                
+                <!-- Metric Glossary -->
+                <section style="margin-bottom: 40px;">
+                    <h2 style="font-size: 24px; margin-bottom: 15px; color: #2196F3;">Metric Glossary</h2>
+                    
+                    <div style="background: #e1f5fe; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2196F3;">
+                        <h3 style="font-size: 18px; margin-bottom: 10px; color: #1a365d;">3PES (3-Point Efficiency Score)</h3>
+                        <p style="font-size: 15px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                            A volume-adjusted metric that ranks overall 3-point shooting performance by combining accuracy, shot difficulty, and total output. Higher scores indicate more efficient, high-volume shooters. 3PES can be used to determine the best three-point shooter for a given season or across an entire career.
+                        </p>
+                        <ul style="font-size: 15px; line-height: 1.6; color: #333; list-style-position: inside;">
+                            <li><strong>Legendary:</strong> 30+</li>
+                            <li><strong>Elite:</strong> 20-30</li>
+                            <li><strong>Good:</strong> 10-20</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #fff9c4; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #FFC107;">
+                        <h3 style="font-size: 18px; margin-bottom: 10px; color: #1a365d;">3P%OE (3-Point Percentage Over Expected)</h3>
+                        <p style="font-size: 15px; line-height: 1.6; color: #333;">
+                            Measures how much better or worse a player shoots compared to league average, weighted by defender distance distribution. A player shooting +5.0% performs 5 percentage points above expectation given their shot profile. This metric adjusts for shot difficulty: shooting 40% on contested shots is more valuable than 40% on wide-open looks.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #f3e5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #9C27B0;">
+                        <h3 style="font-size: 18px; margin-bottom: 10px; color: #1a365d;">3PAA (3-Point Above Average)</h3>
+                        <p style="font-size: 15px; line-height: 1.6; color: #333;">
+                            Quantifies total value added from three-point shooting. Calculated as 3P%OE multiplied by three-pointers made, representing the cumulative extra points a player generates compared to an average shooter taking the same shots. A 3PAA of +150 means the player scored 150 more points from three than expected.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #666;">
+                        <h3 style="font-size: 18px; margin-bottom: 10px; color: #1a365d;">Defender Distance Categories</h3>
+                        <ul style="font-size: 15px; line-height: 1.8; color: #333; list-style-position: inside;">
+                            <li><strong>Very Tight (0-2 feet):</strong> Closest defender within 2 feet at release</li>
+                            <li><strong>Tight (2-4 feet):</strong> Defender 2-4 feet away</li>
+                            <li><strong>Open (4-6 feet):</strong> Defender 4-6 feet away</li>
+                            <li><strong>Wide Open (6+ feet):</strong> Defender more than 6 feet away</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Data & Methodology -->
+                <section style="margin-bottom: 40px;">
+                    <h2 style="font-size: 24px; margin-bottom: 15px; color: #2196F3;">Data & Methodology</h2>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                        <strong>Data Source:</strong> NBA.com
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                        <strong>Coverage:</strong> 2013-14 season through 2025-26 season
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                        <strong>Qualification Standards:</strong>
+                    </p>
+                    <ul style="font-size: 16px; line-height: 1.6; color: #333; margin-left: 20px; margin-bottom: 10px;">
+                        <li>Single season: Minimum 82 three-point attempts</li>
+                        <li>Career: Minimum 250 three-point makes</li>
+                    </ul>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                        <strong>Calculation Methodology:</strong>
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                        League average three-point percentages are calculated separately for each defender distance category and season.
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-top: 10px;">
+                        <strong>Update Frequency:</strong> Data is refreshed weekly during the NBA season.
+                    </p>
+                </section>
+                
+                <!-- How to Use -->
+                <section style="margin-bottom: 40px;">
+                    <h2 style="font-size: 24px; margin-bottom: 15px; color: #2196F3;">How to Use the Site</h2>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                        <strong>Table View:</strong> Sort by any metric to identify league leaders. Use the search bar to find specific players. Swipe horizontally on mobile to view all columns.
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                        <strong>Player Profile:</strong> Select any qualified player to view career statistics, season-by-season breakdowns, shooting charts by defender distance, and algorithmically-generated similar players based on shooting profile.
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                        <strong>Visualizations (Desktop Only):</strong> Interactive scatter plots and comparative charts.
+                    </p>
+                </section>
+                
+                <!-- Contact -->
+                <section style="margin-bottom: 40px;">
+                    <h2 style="font-size: 24px; margin-bottom: 15px; color: #2196F3;">Contact</h2>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333; margin-bottom: 10px;">
+                        For inquiries, advertising, or data licensing: <a href="mailto:contact@3point.app" style="color: #2196F3;">contact@3point.app</a>
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                        3PES, 3P%OE, and 3PAA are proprietary metrics. For commercial use or redistribution, please contact us. See our <a href="#" onclick="document.getElementById('termsModal').style.display='flex'" style="color: #2196F3;">Terms of Service</a> for full usage guidelines.
+                    </p>
+                </section>
+                
+                <!-- Last Updated -->
+                <section style="margin-top: 50px; padding-top: 30px; border-top: 2px solid #ddd;">
+                    <p style="font-size: 14px; color: #666; text-align: center;" id="lastUpdatedDate">
+                        Last Updated: Loading...
+                    </p>
+                </section>
             </div>
         </div>
     </div>
@@ -1341,6 +1465,11 @@
         populatePlayerProfileDropdown();
         filterTable();
         sortTable('3p_pct_oe');
+        
+        // Set last updated date (using current date as proxy for last scrape)
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('lastUpdatedDate').textContent = `Last Updated: ${today.toLocaleDateString('en-US', options)}`;
         
         // Main view switching
         function showMainView(viewName) {
