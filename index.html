@@ -124,26 +124,53 @@
             .main-nav { flex-direction: column; gap: 8px; }
             .main-tab { width: 100%; padding: 12px; font-size: 14px; }
             
+            /* Hide Visualizations tab on mobile - too complex for small screens */
+            .main-tab:nth-child(2) { display: none; }
+            
+            /* Show message if someone tries to access visualizations */
+            #visualizations-view::before {
+                content: 'Interactive charts are best viewed on desktop. View the Best 3PES Seasons table below, or use the Table View and Player Profile tabs for mobile-optimized data.';
+                display: block;
+                padding: 20px;
+                background: #f0f8ff;
+                border: 2px solid #2196F3;
+                border-radius: 8px;
+                color: #333;
+                font-size: 13px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            
+            /* Hide chart controls and non-Best3PES viz on mobile */
+            #visualizations-view .controls,
+            #visualizations-view .viz-tabs,
+            #scatter-viz,
+            #metrics-viz,
+            #efficiency-viz,
+            #cumulative-viz {
+                display: none !important;
+            }
+            
+            /* Keep Best 3PES visible */
+            #best3pes-viz {
+                display: block !important;
+            }
+            
             /* Controls */
             .controls { flex-direction: column; gap: 10px; align-items: stretch; }
             .controls > div { width: 100%; }
             .controls input, .controls select { width: 100%; }
             .season-selector { font-size: 14px; }
             
-            /* Table wrapper - make it scrollable with visible scrollbar */
-            .table-wrapper { 
-                overflow-x: auto; 
-                -webkit-overflow-scrolling: touch;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-            }
+            /* CRITICAL: Match all table fonts */
             table { 
                 font-size: 10px; 
                 min-width: 1200px; /* Force horizontal scroll */
             }
-            th, td { padding: 8px 4px; }
+            th, td { padding: 8px 4px; font-size: 10px !important; }
+            .freq { font-size: 10px !important; }
             
-            /* CRITICAL: Make player column narrower on mobile */
+            /* Make player column narrower on mobile */
             .player-name {
                 max-width: 120px !important;
                 min-width: 120px !important;
@@ -182,57 +209,56 @@
                 flex: 0 0 auto;
             }
             
-            /* Force charts to be responsive with TALLER height */
+            /* Force charts to be responsive with proper aspect ratio */
             canvas { 
                 max-width: 100% !important; 
                 height: auto !important;
-                min-height: 350px !important; /* Increased from 250px */
+                min-height: 300px !important; /* Reduced from 350px */
             }
             
-            /* Chart containers need proper sizing */
+            /* Chart containers */
             .viz-panel {
-                min-height: 400px; /* Increased from 300px */
+                min-height: 350px; /* Reduced from 400px */
                 width: 100%;
             }
             
             .viz-info { font-size: 11px; padding: 10px; }
             
-            /* Best 3PES Table - FIX ZOOM AND COLUMN WIDTH */
+            /* Best 3PES Table - MUCH NARROWER COLUMNS */
             .best3pes-table { 
                 font-size: 8px !important;
                 width: 100%;
+                table-layout: fixed;
             }
             .best3pes-table th,
             .best3pes-table td { 
-                padding: 4px 2px !important;
+                padding: 3px 1px !important;
                 white-space: nowrap;
+                overflow: hidden;
             }
             .best3pes-table img { 
-                width: 20px !important; 
-                height: 20px !important; 
+                width: 18px !important; 
+                height: 18px !important; 
             }
             .best3pes-table .rank-col {
-                width: 25px !important;
-                max-width: 25px !important;
+                width: 20px !important;
             }
             .best3pes-table .player-col {
-                width: 80px !important;
-                max-width: 80px !important;
-                font-size: 8px;
-                overflow: hidden;
+                width: 70px !important;
+                font-size: 7px;
                 text-overflow: ellipsis;
             }
             .best3pes-table .stat-col {
-                width: 40px !important;
-                max-width: 40px !important;
+                width: 35px !important;
+            }
+            /* Make the 3PES bar viz column even narrower */
+            .best3pes-table td:last-child {
+                width: 50px !important;
             }
             #best3pesTable {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
             }
-            
-            /* Fix frequency column font size */
-            .freq { font-size: 10px !important; }
             
             /* Player Profile - CRITICAL FIXES */
             #playerProfileSelect { width: 100%; font-size: 14px; }
@@ -252,16 +278,16 @@
                 font-size: 12px; 
             }
             
-            /* Player profile charts - stack vertically with TALLER height */
+            /* Player profile charts - stack vertically with BETTER aspect ratio */
             #playerProfileContent > div:nth-child(2) { 
                 grid-template-columns: 1fr !important;
                 gap: 20px;
             }
             
-            /* Make sure player profile charts render TALLER */
+            /* Make player profile charts SHORTER with better proportions */
             #playerProfileContent canvas {
                 width: 100% !important;
-                height: 350px !important; /* Increased from 250px */
+                height: 280px !important; /* Reduced from 350px */
                 max-width: 100% !important;
             }
             
@@ -1087,7 +1113,7 @@
                     <td class="player-name">
                         <div class="player-cell">
                             ${photoHTML}
-                            <span style="cursor: pointer; color: #2196F3;" onclick="showMainView('player-profile'); selectPlayerProfile('${playerName.replace(/'/g, "\'")}')">${playerName}</span>
+                            <span class="player-name-link" data-player="${playerName}" style="cursor: pointer; color: #2196F3;">${playerName}</span>
                         </div>
                     </td>
                     <td class="stat-value" style="background-color: #e1f5fe; font-weight: bold;">${pes.toFixed(2)}</td>
@@ -1113,6 +1139,15 @@
                     <td class="stat-value wide-open freq">${wofreq.toFixed(1)}%</td>
                 `;
                 tbody.appendChild(row);
+            });
+            
+            // Add click handlers for player names
+            document.querySelectorAll('.player-name-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    const playerName = this.getAttribute('data-player');
+                    showMainView('player-profile');
+                    selectPlayerProfile(playerName);
+                });
             });
         }
 
@@ -1389,7 +1424,7 @@
                     legendSize: 9,
                     axisLabelSize: 9,
                     axisTitleSize: 10,
-                    aspectRatio: 1.2,
+                    aspectRatio: 1.3, // Changed from 1.2 to be slightly wider
                     legendDisplay: false
                 };
             }
@@ -1810,7 +1845,7 @@
                         <td class="player-col">
                             <div style="display: flex; align-items: center;">
                                 ${photoHTML}
-                                <span style="font-weight: bold; cursor: pointer; color: #2196F3;" onclick="showMainView('player-profile'); selectPlayerProfile('${p.player.replace(/'/g, "\'")}')">${p.player}</span>
+                                <span class="best3pes-player-link" data-player="${p.player}" style="font-weight: bold; cursor: pointer; color: #2196F3;">${p.player}</span>
                             </div>
                         </td>
                         <td class="stat-col">${p.season}</td>
@@ -1832,6 +1867,16 @@
             `;
             
             container.innerHTML = html;
+            
+            // Add click handlers for player names in Best 3PES table
+            document.querySelectorAll('.best3pes-player-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    const playerName = this.getAttribute('data-player');
+                    showMainView('player-profile');
+                    selectPlayerProfile(playerName);
+                });
+            });
+            
             charts.best3pes = true; // Mark as created
         }
         
