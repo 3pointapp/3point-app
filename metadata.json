@@ -1,7 +1,10 @@
 {
-  "last_updated_utc": "2026-02-05T04:09:57+00:00",
-  "seasons_scraped": [],
+  "last_updated_utc": "2026-11-06T06:19:26+00:00",
+  "seasons_scraped": [
+    "2025-26",
+    "2026-27"
+  ],
   "first_season": "2013-14",
-  "latest_season": "2025-26",
-  "latest_season_team_games": null
+  "latest_season": "2026-27",
+  "latest_season_team_games": 9
 }
