@@ -68,8 +68,14 @@ NBA_HEADERS = {
 }
 
 
+RAW_DATA = None  # set by --raw: NBA.com responses captured elsewhere (e.g. from a browser)
+
+
 def fetch_distance(season, distance, retries=4, timeout=60):
     """One API call with retries. Raises if every attempt fails."""
+    if RAW_DATA is not None:
+        rs = RAW_DATA[season][distance['label']]
+        return pd.DataFrame(rs['rowSet'], columns=rs['headers'])
     last_error = None
     for attempt in range(1, retries + 1):
         try:
@@ -129,7 +135,8 @@ def scrape_season_data(season):
             all_players[player_name][f"{distance['label']}_3pm"] = int(fg3m)
             all_players[player_name][f"{distance['label']}_3pa"] = int(fg3a)
 
-        time.sleep(2)  # be polite to the API
+        if RAW_DATA is None:
+            time.sleep(2)  # be polite to the API
 
     return all_players, max_gp
 
@@ -235,7 +242,15 @@ def main():
     parser = argparse.ArgumentParser(description="Scrape NBA.com defender-distance 3PT data")
     parser.add_argument('--full', action='store_true', help='re-scrape every season since 2013-14')
     parser.add_argument('--seasons', nargs='+', help='specific seasons to re-scrape, e.g. 2025-26 2026-27')
+    parser.add_argument('--raw', help='read NBA.com responses from this JSON file instead of calling the API')
     args = parser.parse_args()
+
+    if args.raw:
+        global RAW_DATA
+        with open(args.raw, 'r', encoding='utf-8') as f:
+            RAW_DATA = json.load(f)
+        if not args.seasons:
+            args.seasons = list(RAW_DATA.keys())
 
     seasons = all_seasons()
     current = seasons[0]
