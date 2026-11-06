@@ -12,6 +12,10 @@ on:
         description: 'Seasons to re-scrape (space separated, e.g. "2025-26 2026-27"). Blank = current season only.'
         required: false
         default: ''
+      raw_file:
+        description: 'Optional: JSON file in the repo with NBA.com responses captured from a browser (used instead of calling NBA.com)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -38,8 +42,11 @@ jobs:
       - name: Scrape NBA.com
         env:
           SEASONS: ${{ github.event.inputs.seasons }}
+          RAW_FILE: ${{ github.event.inputs.raw_file }}
         run: |
-          if [ -n "$SEASONS" ]; then
+          if [ -n "$RAW_FILE" ]; then
+            python scrape_multi_season.py --raw "$RAW_FILE"
+          elif [ -n "$SEASONS" ]; then
             python scrape_multi_season.py --seasons $SEASONS
           else
             python scrape_multi_season.py
@@ -49,11 +56,14 @@ jobs:
         run: python create_multi_season_website.py
 
       - name: Commit and push if data changed
+        env:
+          RAW_FILE: ${{ github.event.inputs.raw_file }}
         run: |
+          if [ -n "$RAW_FILE" ]; then git rm -q --ignore-unmatch "$RAW_FILE"; fi
           git config user.name "3point-app bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add nba_shooting_data_all_seasons.json metadata.json index.html
-          if git diff --cached --quiet -- nba_shooting_data_all_seasons.json; then
+          if git diff --cached --quiet; then
             echo "No new stats today; nothing to commit."
           else
             git commit -m "Daily data update $(date -u +%Y-%m-%d)"
