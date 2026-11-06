@@ -1,0 +1,61 @@
+name: Daily data update
+
+on:
+  # 10:17 UTC = 5:17am ET, after the night's games are final.
+  # Runs October through April only (regular season).
+  schedule:
+    - cron: '17 10 * 10-12,1-4 *'
+  # "Run workflow" button on the Actions tab, with optional seasons
+  workflow_dispatch:
+    inputs:
+      seasons:
+        description: 'Seasons to re-scrape (space separated, e.g. "2025-26 2026-27"). Blank = current season only.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scrape NBA.com
+        env:
+          SEASONS: ${{ github.event.inputs.seasons }}
+        run: |
+          if [ -n "$SEASONS" ]; then
+            python scrape_multi_season.py --seasons $SEASONS
+          else
+            python scrape_multi_season.py
+          fi
+
+      - name: Rebuild index.html
+        run: python create_multi_season_website.py
+
+      - name: Commit and push if data changed
+        run: |
+          git config user.name "3point-app bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add nba_shooting_data_all_seasons.json metadata.json index.html
+          if git diff --cached --quiet -- nba_shooting_data_all_seasons.json; then
+            echo "No new stats today; nothing to commit."
+          else
+            git commit -m "Daily data update $(date -u +%Y-%m-%d)"
+            git push
+          fi
